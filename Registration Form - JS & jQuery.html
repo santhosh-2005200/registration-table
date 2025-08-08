@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<!-- saved from url=(0044)file:///C:/Users/ASUS/Desktop/css/index.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<title>Registration Form - JS &amp; jQuery</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: linear-gradient(to right, #74ebd5, #ACB6E5);
+        margin: 0;
+        padding: 40px;
+    }
+    h2 {
+        text-align: center;
+        color: #333;
+    }
+    .tab-buttons {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+    .tab-buttons button {
+        padding: 10px 20px;
+        margin: 5px;
+        border: none;
+        border-radius: 5px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: 0.3s;
+        color: white;
+    }
+    .btn-js {
+        background-color: #4CAF50;
+    }
+    .btn-js:hover {
+        background-color: #45a049;
+    }
+    .btn-jq {
+        background-color: #2196F3;
+    }
+    .btn-jq:hover {
+        background-color: #0b7dda;
+    }
+    .form-section {
+        display: none;
+        background: #fff;
+        max-width: 400px;
+        margin: auto;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    .form-section.active {
+        display: block;
+    }
+    label {
+        display: block;
+        margin-bottom: 6px;
+        font-weight: bold;
+    }
+    input {
+        width: 100%;
+        padding: 8px;
+        margin-bottom: 15px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+    button[type="submit"], .reset-btn {
+        width: 48%;
+        padding: 10px;
+        border: none;
+        border-radius: 5px;
+        font-weight: bold;
+        cursor: pointer;
+        color: white;
+        transition: 0.3s;
+    }
+    button[type="submit"] {
+        background-color: #4CAF50;
+    }
+    button[type="submit"]:hover {
+        background-color: #45a049;
+    }
+    .reset-btn {
+        background-color: #f44336;
+    }
+    .reset-btn:hover {
+        background-color: #da190b;
+    }
+    .error {
+        color: red;
+        font-size: 14px;
+        text-align: center;
+        margin-bottom: 10px;
+    }
+    #tableContainerJS, #tableContainerJQ {
+        margin-top: 20px;
+        text-align: center;
+        display: none; /* hidden initially */
+    }
+    table {
+        width: 80%;
+        margin: auto;
+        border-collapse: collapse;
+    }
+    th, td {
+        border: 1px solid #333;
+        padding: 10px;
+    }
+    th {
+        background-color: #4CAF50;
+        color: white;
+    }
+    tr:hover {
+        background-color: #f1f1f1;
+        transition: 0.3s;
+    }
+</style>
+<script src="./Registration Form - JS &amp; jQuery_files/jquery-3.6.0.min.js.download"></script>
+</head>
+<body>
+
+<h2>Registration Form (JS &amp; jQuery)</h2>
+
+<div class="tab-buttons">
+    <button class="btn-js" onclick="showTab(&#39;js&#39;)">JavaScript Version</button>
+    <button class="btn-jq" onclick="showTab(&#39;jq&#39;)">jQuery Version</button>
+</div>
+
+<!-- JavaScript Form -->
+<div id="form-js" class="form-section active">
+    <form id="regFormJS">
+        <label>Name:</label>
+        <input type="text" id="nameJS">
+        <label>Email:</label>
+        <input type="text" id="emailJS">
+        <label>Phone:</label>
+        <input type="text" id="phoneJS">
+        <p id="errorJS" class="error"></p>
+        <button type="submit">Submit</button>
+        <button type="button" class="reset-btn" onclick="resetJS()">Clear Table</button>
+    </form>
+    <div id="tableContainerJS">
+        <table id="dataTableJS">
+            <tbody><tr><th>Name</th><th>Email</th><th>Phone</th></tr>
+        </tbody></table>
+    </div>
+</div>
+
+<!-- jQuery Form -->
+<div id="form-jq" class="form-section">
+    <form id="regFormJQ">
+        <label>Name:</label>
+        <input type="text" id="nameJQ">
+        <label>Email:</label>
+        <input type="text" id="emailJQ">
+        <label>Phone:</label>
+        <input type="text" id="phoneJQ">
+        <p id="errorJQ" class="error"></p>
+        <button type="submit">Submit</button>
+        <button type="button" class="reset-btn" id="resetJQ">Clear Table</button>
+    </form>
+    <div id="tableContainerJQ">
+        <table id="dataTableJQ">
+            <tbody><tr><th>Name</th><th>Email</th><th>Phone</th></tr>
+        </tbody></table>
+    </div>
+</div>
+
+<script>
+// Switch between JS & jQuery form
+function showTab(tab) {
+    document.getElementById("form-js").classList.remove("active");
+    document.getElementById("form-jq").classList.remove("active");
+    if (tab === 'js') document.getElementById("form-js").classList.add("active");
+    else document.getElementById("form-jq").classList.add("active");
+}
+
+// ==================== JavaScript Logic ====================
+document.getElementById("regFormJS").addEventListener("submit", function(e) {
+    e.preventDefault();
+    let name = document.getElementById("nameJS").value.trim();
+    let email = document.getElementById("emailJS").value.trim();
+    let phone = document.getElementById("phoneJS").value.trim();
+    let error = document.getElementById("errorJS");
+    error.textContent = "";
+
+    if (name === "" || email === "" || phone === "") {
+        error.textContent = "All fields are required!";
+        return;
+    }
+    let emailPattern = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
+    if (!email.match(emailPattern)) {
+        error.textContent = "Invalid email format!";
+        return;
+    }
+    let phonePattern = /^[0-9]{10}$/;
+    if (!phone.match(phonePattern)) {
+        error.textContent = "Phone must be 10 digits!";
+        return;
+    }
+
+    // Show table when first record is added
+    document.getElementById("tableContainerJS").style.display = "block";
+
+    let table = document.getElementById("dataTableJS");
+    let newRow = table.insertRow();
+    newRow.innerHTML = `<td>${name}</td><td>${email}</td><td>${phone}</td>`;
+
+    document.getElementById("regFormJS").reset();
+});
+
+function resetJS() {
+    let table = document.getElementById("dataTableJS");
+    table.innerHTML = `<tr><th>Name</th><th>Email</th><th>Phone</th></tr>`;
+    document.getElementById("tableContainerJS").style.display = "none";
+}
+
+// ==================== jQuery Logic ====================
+$(document).ready(function() {
+    $("#regFormJQ").submit(function(e) {
+        e.preventDefault();
+
+        let name = $("#nameJQ").val().trim();
+        let email = $("#emailJQ").val().trim();
+        let phone = $("#phoneJQ").val().trim();
+        $("#errorJQ").text("");
+
+        if (name === "" || email === "" || phone === "") {
+            $("#errorJQ").text("All fields are required!");
+            return;
+        }
+        let emailPattern = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
+        if (!email.match(emailPattern)) {
+            $("#errorJQ").text("Invalid email format!");
+            return;
+        }
+        let phonePattern = /^[0-9]{10}$/;
+        if (!phone.match(phonePattern)) {
+            $("#errorJQ").text("Phone must be 10 digits!");
+            return;
+        }
+
+        // Show table when first record is added
+        $("#tableContainerJQ").show();
+
+        $("#dataTableJQ").append(`
+            <tr><td>${name}</td><td>${email}</td><td>${phone}</td></tr>
+        `);
+
+        $("#regFormJQ")[0].reset();
+    });
+
+    $("#resetJQ").click(function() {
+        $("#dataTableJQ").html(`<tr><th>Name</th><th>Email</th><th>Phone</th></tr>`);
+        $("#tableContainerJQ").hide();
+    });
+});
+</script>
+
+
+
+</body></html>
